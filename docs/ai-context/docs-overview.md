@@ -27,43 +27,22 @@ This hierarchy allows AI agents to load targeted context efficiently while maint
 
 ## Tier 2: Component-Level Documentation
 
-### Backend Components
-- **[Backend Context](/backend/CONTEXT.md)** - *Server implementation.* API patterns, database integration, service architecture, and performance considerations
-- **[Worker Services](/workers/CONTEXT.md)** - *Background processing.* Job queue patterns, scheduling, and async task management
-- **[Shared Libraries](/shared/CONTEXT.md)** - *Reusable code.* Common utilities, shared types, and cross-component functionality
-
-### Frontend Components
-- **[Web Application](/frontend/CONTEXT.md)** - *Client implementation.* UI patterns, state management, routing, and user interaction patterns
-- **[Mobile Application](/mobile/CONTEXT.md)** - *Mobile implementation.* Platform-specific patterns, native integrations, and mobile optimizations
-- **[Admin Dashboard](/admin/CONTEXT.md)** - *Administrative interface.* Permission patterns, admin workflows, and management tools
-
-### Infrastructure Components
-- **[Infrastructure Code](/infrastructure/CONTEXT.md)** - *IaC patterns.* Terraform/CloudFormation templates, resource definitions, and deployment automation
-- **[Monitoring Setup](/monitoring/CONTEXT.md)** - *Observability patterns.* Metrics collection, alerting rules, and dashboard configurations
+### NextJS-BP-SaaS Components
+- **[Source Code Architecture](/src/CONTEXT.md)** - *Core implementation.* Next.js 15 App Router patterns, TypeScript architecture, security middleware, internationalization, and service integration patterns
 
 ## Tier 3: Feature-Specific Documentation
 
 Granular CONTEXT.md files co-located with code for minimal cascade effects:
 
-### Backend Feature Documentation
-- **[Core Services](/backend/src/core/services/CONTEXT.md)** - *Business logic patterns.* Service architecture, data processing, integration patterns, and error handling
-- **[API Layer](/backend/src/api/CONTEXT.md)** - *API patterns.* Endpoint design, validation, middleware, and request/response handling
-- **[Data Layer](/backend/src/data/CONTEXT.md)** - *Data patterns.* Database models, queries, migrations, and data access patterns
-- **[Authentication](/backend/src/auth/CONTEXT.md)** - *Auth patterns.* Authentication flows, authorization rules, session management, and security
-- **[Integrations](/backend/src/integrations/CONTEXT.md)** - *External services.* Third-party API clients, webhook handlers, and service adapters
+### NextJS-BP-SaaS Feature Documentation
+*Granular implementation documentation co-located with code:*
 
-### Frontend Feature Documentation
-- **[UI Components](/frontend/src/components/CONTEXT.md)** - *Component patterns.* Reusable components, styling patterns, accessibility, and composition strategies
-- **[State Management](/frontend/src/store/CONTEXT.md)** - *State patterns.* Global state, local state, data flow, and persistence strategies
-- **[API Client](/frontend/src/api/CONTEXT.md)** - *Client patterns.* HTTP clients, error handling, caching, and data synchronization
-- **[Routing](/frontend/src/routes/CONTEXT.md)** - *Navigation patterns.* Route definitions, guards, lazy loading, and deep linking
-- **[Utilities](/frontend/src/utils/CONTEXT.md)** - *Helper functions.* Formatters, validators, transformers, and common utilities
-
-### Shared Feature Documentation
-- **[Common Types](/shared/src/types/CONTEXT.md)** - *Type definitions.* Shared interfaces, enums, and type utilities
-- **[Validation Rules](/shared/src/validation/CONTEXT.md)** - *Validation patterns.* Schema definitions, custom validators, and error messages
-- **[Constants](/shared/src/constants/CONTEXT.md)** - *Shared constants.* Configuration values, enums, and magic numbers
-- **[Utilities](/shared/src/utils/CONTEXT.md)** - *Shared utilities.* Cross-platform helpers, formatters, and common functions
+- **[Service Integration](/src/libs/CONTEXT.md)** - *External services.* Authentication (Clerk), security (Arcjet), analytics (PostHog, Sentry), database (Drizzle), and internationalization integration patterns with production-ready configuration management
+- **[App Router Patterns](/src/app/CONTEXT.md)** - *Routing architecture.* Next.js 15 App Router implementation with route groups, layout composition, internationalization routing, authentication flows, and API route patterns  
+- **[Component System](/src/components/CONTEXT.md)** - *UI patterns.* React 19 component architecture with server/client boundaries, form handling (React Hook Form + Zod), analytics integration (PostHog), internationalization patterns, and accessibility-first design
+- **[Database Schema](/src/models/CONTEXT.md)** - *Data patterns.* Drizzle ORM PostgreSQL schemas with centralized schema definition, automatic TypeScript inference, migration management, type-safe database operations across Next.js stack, and evolution-friendly design patterns
+- **[Input Validation](/src/validations/CONTEXT.md)** - *Validation patterns.* Zod 3.x schemas with TypeScript integration, cross-stack validation consistency (client forms + API routes), business rule enforcement, structured error handling, and environment configuration validation
+- **[Utility Functions](/src/utils/CONTEXT.md)** - *Helper patterns.* Environment-aware deployment utilities, internationalization path construction, application configuration management, runtime detection, database migration automation, and cross-cutting infrastructure functions with comprehensive test coverage
 
 
 
