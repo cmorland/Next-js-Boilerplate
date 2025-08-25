@@ -1,16 +1,16 @@
-# [PROJECT NAME] - AI Context Template (claude-master)
+# NextJS-BP-SaaS - AI Context (claude-master)
 
 ## 1. Project Overview
-- **Vision:** [Describe your project's vision and goals]
-- **Current Phase:** [Current development phase and status]
-- **Key Architecture:** [High-level architecture description]
-- **Development Strategy:** [Development approach and strategy notes]
+- **Vision:** Production-ready Next.js 15 SaaS boilerplate with enterprise-grade authentication, security, internationalization, and comprehensive AI-assisted development integration
+- **Current Phase:** Production Ready with Comprehensive Documentation System
+- **Key Architecture:** Next.js 15 + App Router + React 19 + TypeScript 5.8.3 + Clerk Auth + Arcjet Security + Drizzle ORM + PostgreSQL + PostHog Analytics + Sentry Monitoring + next-intl + Tailwind CSS + Claude Code Integration
+- **Development Strategy:** AI-First Development with Systematic Documentation, Type Safety and Automated Quality Gates
 
 ## 2. Project Structure
 
 **⚠️ CRITICAL: AI agents MUST read the [Project Structure documentation](/docs/ai-context/project-structure.md) before attempting any task to understand the complete technology stack, file tree and project organization.**
 
-[Project Name] follows a [describe architecture pattern]. For the complete tech stack and file tree structure, see [docs/ai-context/project-structure.md](/docs/ai-context/project-structure.md).
+NextJS-BP-SaaS is a modern full-stack boilerplate with an AI-Powered development workflow. For the complete tech stack and file tree structure, see [docs/ai-context/project-structure.md](/docs/ai-context/project-structure.md).
 
 ## 3. Coding Standards & AI Instructions
 
@@ -41,92 +41,162 @@
 - Structure projects with clear folder hierarchies and consistent naming conventions
 - Import/export properly - design for reusability and maintainability
 
-### Type Hints (REQUIRED)
-- **Always** use type hints for function parameters and return values
-- Use `from typing import` for complex types
-- Prefer `Optional[T]` over `Union[T, None]`
-- Use Pydantic models for data structures
+### TypeScript & Type Safety (REQUIRED)
+- **Always** use TypeScript interfaces for component props and function parameters
+- **Strict Type Checking**: All code must pass TypeScript strict mode
+- **Runtime Validation**: Use Zod schemas for API validation and environment variables
+- **Database Types**: Leverage Drizzle ORM automatic type inference
+- **Component Types**: Proper React component typing with server/client boundaries
 
-```python
-# Good
-from typing import Optional, List, Dict, Tuple
-
-async def process_audio(
-    audio_data: bytes,
-    session_id: str,
-    language: Optional[str] = None
-) -> Tuple[bytes, Dict[str, Any]]:
-    """Process audio through the pipeline."""
-    pass
+```typescript
+// Good - API Route with end-to-end type safety
+export const PUT = async (request: Request): Promise<NextResponse> => {
+  const json = await request.json();
+  const parse = CounterValidation.safeParse(json);
+  
+  if (!parse.success) {
+    return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
+  }
+  
+  const result = await db.insert(counterSchema).values(parse.data);
+  return NextResponse.json(result);
+};
 ```
 
 ### Naming Conventions
-- **Classes**: PascalCase (e.g., `VoicePipeline`)
-- **Functions/Methods**: snake_case (e.g., `process_audio`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_AUDIO_SIZE`)
-- **Private methods**: Leading underscore (e.g., `_validate_input`)
-- **Pydantic Models**: PascalCase with `Schema` suffix (e.g., `ChatRequestSchema`, `UserSchema`)
+- **Components**: PascalCase (e.g., `CounterForm`, `BaseTemplate`)
+- **Functions/Utilities**: camelCase (e.g., `getBaseUrl`, `getI18nPath`)
+- **Constants/Config**: PascalCase objects (e.g., `AppConfig`, `ClerkLocalizations`)
+- **Types/Interfaces**: PascalCase with descriptive suffixes (e.g., `CounterValidationType`)
+- **Files**: PascalCase for components, camelCase for utilities, lowercase for pages
 
 
 ### Documentation Requirements
-- Every module needs a docstring
-- Every public function needs a docstring
-- Use Google-style docstrings
-- Include type information in docstrings
+- Every component needs comprehensive JSDoc comments
+- Every utility function needs parameter and return type documentation
+- Use TSDoc standard with @param and @returns tags
+- Maintain CONTEXT.md files for architectural documentation
+- Follow 3-tier documentation system (Foundation → Component → Feature-specific)
 
-```python
-def calculate_similarity(text1: str, text2: str) -> float:
-    """Calculate semantic similarity between two texts.
-
-    Args:
-        text1: First text to compare
-        text2: Second text to compare
-
-    Returns:
-        Similarity score between 0 and 1
-
-    Raises:
-        ValueError: If either text is empty
-    """
-    pass
+```typescript
+/**
+ * Generate environment-aware base URL for the application
+ * 
+ * @returns The appropriate base URL based on deployment environment
+ * Priority: NEXT_PUBLIC_APP_URL → Vercel production → Vercel preview → localhost
+ */
+export const getBaseUrl = (): string => {
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
+  // Additional environment detection logic...
+};
 ```
 
 ### Security First
-- Never trust external inputs - validate everything at the boundaries
-- Keep secrets in environment variables, never in code
-- Log security events (login attempts, auth failures, rate limits, permission denials) but never log sensitive data (audio, conversation content, tokens, personal info)
-- Authenticate users at the API gateway level - never trust client-side tokens
-- Use Row Level Security (RLS) to enforce data isolation between users
-- Design auth to work across all client types consistently
-- Use secure authentication patterns for your platform
-- Validate all authentication tokens server-side before creating sessions
-- Sanitize all user inputs before storing or processing
+- **Defense in Depth**: Multi-layer security with Arcjet → Clerk → API validation pipeline
+- **Environment Validation**: All secrets validated with Zod schemas using @t3-oss/env-nextjs
+- **Input Sanitization**: Validate all API inputs with Zod schemas before database operations
+- **Server-Side Authentication**: Use Clerk's `currentUser()` for protected routes, never trust client tokens
+- **Security Middleware**: Implement bot protection, rate limiting, and attack prevention with Arcjet
+- **SSL by Default**: Automatic HTTPS configuration for production deployments
+- **Structured Logging**: Log security events via LogTape but never expose internal errors to clients
+- **Route Protection**: Use Next.js middleware for authentication guards and locale-aware security
+
+```typescript
+// Security middleware pipeline
+export async function middleware(request: NextRequest) {
+  // 1. Security layer (Arcjet)
+  const decision = await aj.protect(request);
+  
+  // 2. Authentication layer (Clerk)
+  const authResult = await clerkMiddleware(request);
+  
+  // 3. Internationalization layer
+  return createI18nMiddleware(request);
+}
+```
 
 ### Error Handling
-- Use specific exceptions over generic ones
-- Always log errors with context
-- Provide helpful error messages
-- Fail securely - errors shouldn't reveal system internals
+- **Structured Error Responses**: Use `z.treeifyError()` for consistent API error formatting
+- **Client/Server Boundaries**: Handle errors differently in server components vs client components
+- **Logging Integration**: Use LogTape for structured error logging with context
+- **Fail Securely**: Never expose internal errors - sanitize all client-facing error messages
+- **Form Validation**: Integrate React Hook Form errors with Zod validation schemas
+
+```typescript
+// API error handling pattern
+if (!parse.success) {
+  return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
+}
+
+// Component error boundary pattern
+if (form.formState.errors.increment) {
+  return <div className="text-red-500">{t('error_increment_range')}</div>;
+}
+```
 
 ### Observable Systems & Logging Standards
-- Every request needs a correlation ID for debugging
-- Structure logs for machines, not humans - use JSON format with consistent fields (timestamp, level, correlation_id, event, context) for automated analysis
-- Make debugging possible across service boundaries
+- **Structured Logging**: Use LogTape with JSON format for machine-readable logs
+- **Request Correlation**: Track user sessions with Clerk user IDs and request context
+- **Multi-Output Logging**: Console for development, file/external services for production
+- **Error Tracking**: Automatic error capture with Sentry integration via instrumentation
+- **Analytics Integration**: PostHog for user behavior tracking with privacy-first configuration
+- **Performance Monitoring**: Next.js built-in performance metrics and Sentry performance tracking
+
+```typescript
+// Logging with structured context
+logger.info('Database operation completed', {
+  operation: 'counter_update',
+  userId: user?.id,
+  timestamp: new Date().toISOString(),
+  metadata: { increment: validatedData.increment }
+});
+```
 
 ### State Management
-- Have one source of truth for each piece of state
-- Make state changes explicit and traceable
-- Design for multi-service voice processing - use session IDs for state coordination, avoid storing conversation data in server memory
-- Keep conversation history lightweight (text, not audio)
+- **Server/Client Boundaries**: Use server components for data fetching, client components for interactivity
+- **Form State**: React Hook Form for client-side form state with Zod validation
+- **Database State**: Drizzle ORM with automatic TypeScript inference and hot-reload protection
+- **Authentication State**: Clerk providers at layout boundaries with locale-aware configuration
+- **Global Configuration**: Centralized AppConfig with environment-based service activation
+- **Session Management**: Next.js session handling with Clerk integration
 
-### API Design Principles
-- RESTful design with consistent URL patterns
-- Use HTTP status codes correctly
-- Version APIs from day one (/v1/, /v2/)
-- Support pagination for list endpoints
-- Use consistent JSON response format:
-  - Success: `{ "data": {...}, "error": null }`
-  - Error: `{ "data": null, "error": {"message": "...", "code": "..."} }`
+```typescript
+// State composition pattern
+const form = useForm({
+  resolver: zodResolver(CounterValidation),
+  defaultValues: { increment: 0 }
+});
+
+// Server state pattern
+const result = await db.query.counterSchema.findMany({
+  where: eq(counterSchema.id, id)
+});
+```
+
+### API Design Principles (Next.js App Router)
+- **Route Handlers**: Use Next.js 15 App Router API routes with proper TypeScript typing
+- **HTTP Methods**: Export named functions (GET, POST, PUT, DELETE) from route.ts files
+- **Input Validation**: Zod schema validation for all incoming request data
+- **Error Responses**: Consistent error formatting with `z.treeifyError()` and proper status codes
+- **Internationalization**: API routes support locale-aware responses via headers
+- **Database Integration**: Direct database operations with Drizzle ORM type safety
+- **Testing Isolation**: E2E testing patterns with `x-e2e-random-id` headers
+
+```typescript
+// Next.js API route pattern
+export const PUT = async (request: Request) => {
+  const json = await request.json();
+  const parse = CounterValidation.safeParse(json);
+  
+  if (!parse.success) {
+    return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
+  }
+  
+  return NextResponse.json({ count: result[0]?.count });
+};
+```
 
 
 ## 4. Multi-Agent Workflows & Context Injection
