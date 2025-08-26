@@ -231,6 +231,7 @@ NextJS-BP-SaaS/
 │   │
 │   ├── utils/                                   # Utility functions and helpers
 │   │   ├── AppConfig.ts                         # Application-wide configuration constants
+│   │   ├── DBConnection.ts                      # Database connection factory with connection pooling
 │   │   ├── DBMigration.ts                       # Database migration utilities
 │   │   ├── Helpers.ts                           # General-purpose helper functions
 │   │   └── Helpers.test.ts                      # Helper function unit tests

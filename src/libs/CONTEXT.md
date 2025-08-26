@@ -48,21 +48,14 @@ export const Env = createEnv({
 
 ### 2. Singleton with Hot-Reload Protection Pattern
 
-**Database Connection Management**: `DB.ts` implements singleton pattern optimized for Next.js development.
+**Database Connection Management**: `DB.ts` implements singleton pattern with separated connection factory for modular architecture.
 
 ```typescript
+// DB.ts - Global instance management
+import { createDbConnection } from '@/utils/DBConnection';
+
 const globalForDb = globalThis as unknown as {
   drizzle: NodePgDatabase<typeof schema>;
-};
-
-const createDbConnection = () => {
-  return drizzle({
-    connection: {
-      connectionString: Env.DATABASE_URL,
-      ssl: Env.DATABASE_URL.includes('sslmode=require') ? { rejectUnauthorized: false } : false,
-    },
-    schema,
-  });
 };
 
 const db = globalForDb.drizzle || createDbConnection();
@@ -71,13 +64,26 @@ const db = globalForDb.drizzle || createDbConnection();
 if (Env.NODE_ENV !== 'production') {
   globalForDb.drizzle = db;
 }
+
+// DBConnection.ts - Connection factory utility
+export const createDbConnection = () => {
+  const pool = new Pool({
+    connectionString: Env.DATABASE_URL,
+    ssl: !Env.DATABASE_URL.includes('localhost') && !Env.DATABASE_URL.includes('127.0.0.1'),
+    max: 1,
+  });
+
+  return drizzle({ client: pool, schema });
+};
 ```
 
 **Implementation Benefits**:
 - **Hot-Reload Protection**: Prevents multiple database connections during development
-- **SSL Auto-Detection**: Automatically configures SSL based on connection string
-- **Environment-Aware**: Different connection caching behavior for development vs production
+- **SSL Auto-Detection**: Automatically configures SSL based on connection string (localhost/127.0.0.1 detection)
+- **Environment-Aware**: Different connection caching behavior for development vs production  
 - **Schema Integration**: Type-safe database operations with `/src/models/Schema.ts`
+- **Modular Architecture**: Separated connection factory allows reuse in migrations and testing
+- **Connection Pooling**: Uses pg.Pool with single connection limit for controlled resource usage
 
 ### 3. Service Factory with Extension Pattern
 
@@ -157,10 +163,10 @@ await configure({
   - **Usage**: All other services depend on this for configuration
 
 - **`DB.ts`**: Database connection and schema management
-  - **Dependencies**: `Env.ts` (DATABASE_URL), `/src/models/Schema.ts`
+  - **Dependencies**: `Env.ts` (via DBConnection), `/src/utils/DBConnection.ts`, `/src/models/Schema.ts`
   - **Exports**: Drizzle database instance with connection pooling
-  - **Pattern**: Singleton with global storage and SSL auto-detection
-  - **Features**: Hot-reload protection, environment-aware caching
+  - **Pattern**: Singleton with global storage using separated connection factory
+  - **Features**: Hot-reload protection, environment-aware caching, modular connection management
 
 ### External Service Integrations
 

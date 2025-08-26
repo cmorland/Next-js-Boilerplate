@@ -107,17 +107,45 @@ export const isServer = () => {
 - **Conditional Logic**: Enables environment-specific code paths
 - **Performance Optimization**: Allows server-only or client-only operations
 
+### Database Connection Factory (`DBConnection.ts`)
+```typescript
+// Reusable database connection factory with connection pooling
+export const createDbConnection = () => {
+  const pool = new Pool({
+    connectionString: Env.DATABASE_URL,
+    ssl: !Env.DATABASE_URL.includes('localhost') && !Env.DATABASE_URL.includes('127.0.0.1'),
+    max: 1,
+  });
+
+  return drizzle({ client: pool, schema });
+};
+```
+
+**Connection Factory Patterns**:
+- **Modular Architecture**: Separated connection logic allows reuse across different contexts
+- **SSL Auto-Detection**: Intelligent SSL configuration based on connection string patterns
+- **Connection Pooling**: PostgreSQL connection pool with resource control (max: 1)
+- **Environment Integration**: Uses validated environment variables from `Env.ts`
+- **Schema Integration**: Type-safe database operations with automatic schema binding
+
 ### Database Migration Automation (`DBMigration.ts`)
 ```typescript
-// Automatic migration execution during app initialization
-await migrate(db, {
-  migrationsFolder: path.join(process.cwd(), 'migrations'),
-});
+// Automatic migration execution with dedicated connection management
+try {
+  const migrationDb = createDbConnection();
+  await migrate(migrationDb, {
+    migrationsFolder: path.join(process.cwd(), 'migrations'),
+  });
+} finally {
+  await migrationDb.end?.();
+}
 ```
 
 **Migration Patterns**:
+- **Dedicated Connections**: Uses DBConnection factory for controlled migration execution
 - **Initialization Hook**: Automatic execution via Next.js `instrumentation.ts`
 - **Filesystem Integration**: Direct migration file discovery from `/migrations`
+- **Connection Lifecycle**: Proper connection cleanup with try-finally blocks
 - **Development Workflow**: Seamless migration application on server restart
 - **Production Safety**: Controlled migration execution in deployment environments
 
@@ -129,13 +157,15 @@ src/utils/
 ├── AppConfig.ts       # Application configuration and internationalization settings
 ├── Helpers.ts         # Environment, URL, and runtime utilities
 ├── Helpers.test.ts    # Unit tests for helper functions
+├── DBConnection.ts    # Database connection factory with connection pooling
 └── DBMigration.ts     # Database migration automation utilities
 ```
 
 **File Responsibilities**:
 - **AppConfig.ts**: Centralized application constants, branding, and localization configuration
 - **Helpers.ts**: Environment detection, URL generation, i18n path construction, runtime utilities
-- **DBMigration.ts**: Database schema migration automation via Drizzle ORM
+- **DBConnection.ts**: Reusable database connection factory with SSL auto-detection and connection pooling
+- **DBMigration.ts**: Database schema migration automation via Drizzle ORM using DBConnection factory
 - **Helpers.test.ts**: Comprehensive test coverage for utility function behavior
 
 ### Function Usage Distribution
@@ -143,6 +173,9 @@ src/utils/
 // AppConfig usage across components
 import { AppConfig } from '@/utils/AppConfig';           // Templates, routing
 import { ClerkLocalizations } from '@/utils/AppConfig';  // Authentication layouts
+
+// Database connection factory usage
+import { createDbConnection } from '@/utils/DBConnection';  // DB.ts, DBMigration.ts, testing
 
 // Helper function usage across stack
 import { getBaseUrl } from '@/utils/Helpers';      // Sitemap, robots.txt

@@ -93,7 +93,7 @@ src/validations/
 
 ### Schema Definition Anatomy
 ```typescript
-import { z } from 'zod';
+import z from 'zod';  // Standardized default import pattern
 
 export const CounterValidation = z.object({
   increment: z.coerce.number()  // Type coercion for form inputs

@@ -50,6 +50,9 @@ NextJS-BP-SaaS is a modern full-stack boilerplate with an AI-Powered development
 
 ```typescript
 // Good - API Route with end-to-end type safety
+import z from 'zod';  // Standardized default import pattern
+import { CounterValidation } from '@/validations/CounterValidation';
+
 export const PUT = async (request: Request): Promise<NextResponse> => {
   const json = await request.json();
   const parse = CounterValidation.safeParse(json);
@@ -126,11 +129,13 @@ export async function middleware(request: NextRequest) {
 
 ```typescript
 // API error handling pattern
+import z from 'zod';  // Standardized default import pattern
+
 if (!parse.success) {
   return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
 }
 
-// Component error boundary pattern
+// Component error boundary pattern  
 if (form.formState.errors.increment) {
   return <div className="text-red-500">{t('error_increment_range')}</div>;
 }
@@ -186,6 +191,9 @@ const result = await db.query.counterSchema.findMany({
 
 ```typescript
 // Next.js API route pattern
+import z from 'zod';  // Standardized default import pattern
+import { CounterValidation } from '@/validations/CounterValidation';
+
 export const PUT = async (request: Request) => {
   const json = await request.json();
   const parse = CounterValidation.safeParse(json);

@@ -183,8 +183,18 @@ export const PUT = async (request: Request) => {
 **API Integration Features**:
 - **Type-Safe Validation**: Zod schemas with structured error responses
 - **Database Integration**: Drizzle ORM with SQL operations and conflict handling
-- **Testing Support**: E2E testing headers for isolated test scenarios
+- **E2E Testing Support**: Enhanced header handling for test isolation with NaN protection
 - **Observability**: Structured logging for all API operations
+
+**E2E Testing Header Pattern**:
+```typescript
+// Enhanced NaN protection for test headers
+const testId = Number(request.headers.get('x-e2e-random-id')) || 0;
+
+// Logical OR (||) provides better NaN handling than nullish coalescing (??) 
+// because Number(undefined) returns NaN, and NaN || 0 === 0
+// while NaN ?? 0 === NaN (unexpected behavior)
+```
 
 ## Key Files and Structure
 
