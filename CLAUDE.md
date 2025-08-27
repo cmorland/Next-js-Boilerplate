@@ -28,7 +28,6 @@ NextJS-BP-SaaS is a modern full-stack boilerplate with an AI-Powered development
 - Make side effects explicit and minimal.
 - Design database schema to be evolution-friendly (avoid breaking changes).
 
-
 ### File Organization & Modularity
 - Default to creating multiple small, focused files rather than large monolithic ones
 - Each file should have a single responsibility and clear purpose
@@ -50,17 +49,17 @@ NextJS-BP-SaaS is a modern full-stack boilerplate with an AI-Powered development
 
 ```typescript
 // Good - API Route with end-to-end type safety
-import z from 'zod';  // Standardized default import pattern
+import z from 'zod'; // Standardized default import pattern
 import { CounterValidation } from '@/validations/CounterValidation';
 
 export const PUT = async (request: Request): Promise<NextResponse> => {
   const json = await request.json();
   const parse = CounterValidation.safeParse(json);
-  
+
   if (!parse.success) {
     return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
   }
-  
+
   const result = await db.insert(counterSchema).values(parse.data);
   return NextResponse.json(result);
 };
@@ -73,7 +72,6 @@ export const PUT = async (request: Request): Promise<NextResponse> => {
 - **Types/Interfaces**: PascalCase with descriptive suffixes (e.g., `CounterValidationType`)
 - **Files**: PascalCase for components, camelCase for utilities, lowercase for pages
 
-
 ### Documentation Requirements
 - Every component needs comprehensive JSDoc comments
 - Every utility function needs parameter and return type documentation
@@ -84,7 +82,7 @@ export const PUT = async (request: Request): Promise<NextResponse> => {
 ```typescript
 /**
  * Generate environment-aware base URL for the application
- * 
+ *
  * @returns The appropriate base URL based on deployment environment
  * Priority: NEXT_PUBLIC_APP_URL → Vercel production → Vercel preview → localhost
  */
@@ -111,10 +109,10 @@ export const getBaseUrl = (): string => {
 export async function middleware(request: NextRequest) {
   // 1. Security layer (Arcjet)
   const decision = await aj.protect(request);
-  
+
   // 2. Authentication layer (Clerk)
   const authResult = await clerkMiddleware(request);
-  
+
   // 3. Internationalization layer
   return createI18nMiddleware(request);
 }
@@ -135,7 +133,7 @@ if (!parse.success) {
   return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
 }
 
-// Component error boundary pattern  
+// Component error boundary pattern
 if (form.formState.errors.increment) {
   return <div className="text-red-500">{t('error_increment_range')}</div>;
 }
@@ -191,27 +189,25 @@ const result = await db.query.counterSchema.findMany({
 
 ```typescript
 // Next.js API route pattern
-import z from 'zod';  // Standardized default import pattern
+import z from 'zod'; // Standardized default import pattern
 import { CounterValidation } from '@/validations/CounterValidation';
 
 export const PUT = async (request: Request) => {
   const json = await request.json();
   const parse = CounterValidation.safeParse(json);
-  
+
   if (!parse.success) {
     return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
   }
-  
+
   return NextResponse.json({ count: result[0]?.count });
 };
 ```
-
 
 ## 4. Multi-Agent Workflows & Context Injection
 
 ### Automatic Context Injection for Sub-Agents
 When using the Task tool to spawn sub-agents, the core project context (CLAUDE.md, project-structure.md, docs-overview.md) is automatically injected into their prompts via the subagent-context-injector hook. This ensures all sub-agents have immediate access to essential project documentation without the need of manual specification in each Task prompt.
-
 
 ## 5. MCP Server Integrations
 
@@ -286,8 +282,6 @@ mcp__context7__get_library_docs(
 - Topic-focused documentation retrieval
 - Support for specific library versions
 - Integration with current development practices
-
-
 
 ## 6. Post-Task Completion Protocol
 After completing any coding task, follow this checklist:

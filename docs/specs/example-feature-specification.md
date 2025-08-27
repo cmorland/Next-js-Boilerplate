@@ -137,15 +137,15 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-    "success": true,
-    "user": {
-        "id": 1,
-        "email": "user@example.com",
-        "first_name": "John",
-        "last_name": "Doe"
-    },
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+  "success": true,
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Doe"
+  },
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
 }
 ```
 
@@ -163,9 +163,9 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-    "success": true,
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+  "success": true,
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
 }
 ```
 

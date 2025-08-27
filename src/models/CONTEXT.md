@@ -15,7 +15,7 @@ export const counterSchema = pgTable('counter', {
   count: integer('count').default(0),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
-    .$onUpdate(() => new Date())  // Automatic timestamp updates
+    .$onUpdate(() => new Date()) // Automatic timestamp updates
     .notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
@@ -40,7 +40,7 @@ const createDbConnection = () => {
       connectionString: Env.DATABASE_URL,
       ssl: !Env.DATABASE_URL.includes('localhost') && !Env.DATABASE_URL.includes('127.0.0.1'),
     },
-    schema,  // Full schema import for type inference
+    schema, // Full schema import for type inference
   });
 };
 

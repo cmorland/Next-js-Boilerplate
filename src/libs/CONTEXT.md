@@ -9,7 +9,7 @@ The `/src/libs` directory implements a **service integration hub** pattern with 
 ### Core Integration Services
 
 - **`Env.ts`**: Type-safe environment validation foundation using @t3-oss/env-nextjs
-- **`DB.ts`**: Database connection management with Drizzle ORM and hot-reload protection  
+- **`DB.ts`**: Database connection management with Drizzle ORM and hot-reload protection
 - **`Arcjet.ts`**: Security middleware with bot protection and rate limiting
 - **`Logger.ts`**: Structured logging with multi-sink support (LogTape)
 - **`I18n.ts`**: Internationalization configuration (next-intl)
@@ -80,7 +80,7 @@ export const createDbConnection = () => {
 **Implementation Benefits**:
 - **Hot-Reload Protection**: Prevents multiple database connections during development
 - **SSL Auto-Detection**: Automatically configures SSL based on connection string (localhost/127.0.0.1 detection)
-- **Environment-Aware**: Different connection caching behavior for development vs production  
+- **Environment-Aware**: Different connection caching behavior for development vs production
 - **Schema Integration**: Type-safe database operations with `/src/models/Schema.ts`
 - **Modular Architecture**: Separated connection factory allows reuse in migrations and testing
 - **Connection Pooling**: Uses pg.Pool with single connection limit for controlled resource usage
@@ -132,16 +132,16 @@ const betterStackSink = fromBetterStack({
 await configure({
   sinks: {
     console: getConsoleSink(),
-    ...(Env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN && 
-        Env.NEXT_PUBLIC_BETTER_STACK_INGESTING_HOST && {
+    ...(Env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN
+      && Env.NEXT_PUBLIC_BETTER_STACK_INGESTING_HOST && {
       betterStack: fromAsyncSink(betterStackSink),
     }),
   },
   loggers: [{
     category: ['app'],
-    sinks: Env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN ? 
-           ['console', 'betterStack'] : 
-           ['console'],
+    sinks: Env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN
+      ? ['console', 'betterStack']
+      : ['console'],
     lowestLevel: 'debug',
   }],
 });
@@ -211,7 +211,7 @@ await configure({
 ```typescript
 // Processing pipeline: Security → Authentication → Internationalization
 1. Arcjet Security: Bot detection, rate limiting, shield protection
-2. Clerk Authentication: Route-based conditional authentication  
+2. Clerk Authentication: Route-based conditional authentication
 3. I18n Routing: Locale resolution and routing
 ```
 
@@ -244,7 +244,7 @@ try {
 **Service Consumption**: Application components consistently consume configured services.
 
 - **Database**: API routes use `db` for type-safe database operations
-- **Logging**: Components use `logger` for structured application logging  
+- **Logging**: Components use `logger` for structured application logging
 - **Environment**: Components access validated environment variables via `Env`
 - **I18n**: Components use navigation helpers for locale-aware routing
 

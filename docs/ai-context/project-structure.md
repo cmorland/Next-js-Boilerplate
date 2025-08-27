@@ -28,7 +28,7 @@ This document provides the complete technology stack and file tree structure for
 
 ### Integration Services & APIs
 - **Sentry 9.46.0** - Error tracking and performance monitoring with source maps
-- **PostHog 1.260.1** - Product analytics and feature flags with privacy-first approach  
+- **PostHog 1.260.1** - Product analytics and feature flags with privacy-first approach
 - **next-intl 4.3.4** - Internationalization with server-side rendering optimization
 - **@logtape/logtape 1.0.4** - Structured logging for development and production
 

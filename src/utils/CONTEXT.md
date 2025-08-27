@@ -9,11 +9,15 @@
 ```typescript
 // Environment-aware URL generation with deployment fallbacks
 export const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
   if (process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   }
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
   return 'http://localhost:3000';
 };
 ```
@@ -24,17 +28,17 @@ export const getBaseUrl = () => {
 ```typescript
 // Centralized configuration with internationalization support
 export const AppConfig = {
-  name: 'Nextjs Starter',          // Application branding
-  locales: ['en', 'fr'],           // Supported languages
-  defaultLocale: 'en',             // Fallback language
-  localePrefix: 'as-needed',       // next-intl routing strategy
+  name: 'Nextjs Starter', // Application branding
+  locales: ['en', 'fr'], // Supported languages
+  defaultLocale: 'en', // Fallback language
+  localePrefix: 'as-needed', // next-intl routing strategy
 };
 
 // Clerk authentication localization mapping
 export const ClerkLocalizations = {
   defaultLocale: enUS,
   supportedLocales: {
-    en: enUS,  // @clerk/localizations
+    en: enUS, // @clerk/localizations
     fr: frFR,
   },
 };
@@ -54,17 +58,17 @@ export const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
-  
+
   // 2. Vercel production environment
   if (process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   }
-  
+
   // 3. Vercel preview/development
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  
+
   // 4. Local development fallback
   return 'http://localhost:3000';
 };
@@ -81,9 +85,9 @@ export const getBaseUrl = () => {
 // Locale-aware URL path construction
 export const getI18nPath = (url: string, locale: string) => {
   if (locale === routing.defaultLocale) {
-    return url;  // Default locale URLs have no prefix
+    return url; // Default locale URLs have no prefix
   }
-  return `/${locale}${url}`;  // Non-default locales prefixed
+  return `/${locale}${url}`; // Non-default locales prefixed
 };
 ```
 
@@ -171,16 +175,16 @@ src/utils/
 ### Function Usage Distribution
 ```typescript
 // AppConfig usage across components
-import { AppConfig } from '@/utils/AppConfig';           // Templates, routing
-import { ClerkLocalizations } from '@/utils/AppConfig';  // Authentication layouts
+import { AppConfig } from '@/utils/AppConfig'; // Templates, routing
+import { ClerkLocalizations } from '@/utils/AppConfig'; // Authentication layouts
 
 // Database connection factory usage
-import { createDbConnection } from '@/utils/DBConnection';  // DB.ts, DBMigration.ts, testing
+import { createDbConnection } from '@/utils/DBConnection'; // DB.ts, DBMigration.ts, testing
 
 // Helper function usage across stack
-import { getBaseUrl } from '@/utils/Helpers';      // Sitemap, robots.txt
-import { getI18nPath } from '@/utils/Helpers';     // Auth pages, navigation
-import { isServer } from '@/utils/Helpers';        // Conditional rendering
+import { getBaseUrl } from '@/utils/Helpers'; // Sitemap, robots.txt
+import { getI18nPath } from '@/utils/Helpers'; // Auth pages, navigation
+import { isServer } from '@/utils/Helpers'; // Conditional rendering
 ```
 
 ## Integration Points
@@ -225,7 +229,7 @@ export const routing = createNavigation({
 // Clerk localization from AppConfig
 import { ClerkLocalizations } from '@/utils/AppConfig';
 
-const clerkLocale = ClerkLocalizations.supportedLocales[locale] 
+const clerkLocale = ClerkLocalizations.supportedLocales[locale]
   ?? ClerkLocalizations.defaultLocale;
 
 <ClerkProvider localization={clerkLocale}>
@@ -283,12 +287,14 @@ describe('getI18nPath function', () => {
   it('should not change the path for default language', () => {
     const url = '/random-url';
     const locale = routing.defaultLocale;
+
     expect(getI18nPath(url, locale)).toBe(url);
   });
 
   it('should prepend the locale to the path for non-default language', () => {
     const url = '/random-url';
     const locale = 'fr';
+
     expect(getI18nPath(url, locale)).toMatch(/^\/fr/);
   });
 });
@@ -329,7 +335,7 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     const { logger } = await import('./libs/Logger');
     logger.info('Server instrumentation started');
-    
+
     // Automatic migration execution
     await import('./utils/DBMigration');
   }

@@ -13,7 +13,6 @@ All documentation must be optimized for AI consumption and future-proofing:
 - **Modular & Scalable**: Structure for partial updates and project growth.
 - **Cross-references**: Link related concepts with file paths, function names, and stable identifiers
 
-
 ---
 
 ## Step 1: Analyze & Strategize
@@ -91,12 +90,12 @@ Think deeply about synthesizing findings and generating comprehensive documentat
 #### For Direct Creation (No Sub-Agents)
 **Code-First Analysis Methodology:**
 1. **Directory Structure Analysis**: Map file organization and purposes using Glob/LS
-2. **Import Dependency Analysis**: Use Grep to identify integration patterns and dependencies  
+2. **Import Dependency Analysis**: Use Grep to identify integration patterns and dependencies
 3. **Pattern Extraction**: Read key files to identify architectural patterns and coding conventions
 4. **Technology Usage Analysis**: Detect frameworks, libraries, and technology-specific patterns
 5. **Existing Documentation Assessment**: Read any current CLAUDE.md files for valuable insights
 
-#### For Sub-Agent Strategies  
+#### For Sub-Agent Strategies
 **Synthesis Integration Process:**
 1. **Compile Core Findings**: Merge agent findings for immediate documentation generation
 2. **Extract Cross-Tier Patterns**: Identify system-wide patterns that may impact foundational documentation
@@ -199,7 +198,7 @@ Think deeply about synthesizing findings and generating comprehensive documentat
 2. **Read Foundational Docs**: Load discovered Tier 1 files to understand documented architecture
 3. **Cross-Tier Analysis**: Using analysis findings from previous steps, compare:
    - **Technology Stack**: Discovered frameworks/tools vs documented stack
-   - **Architecture Patterns**: Implementation reality vs documented decisions  
+   - **Architecture Patterns**: Implementation reality vs documented decisions
    - **Integration Points**: Actual dependencies vs documented integrations
 4. **Generate Recommendations**: Output evidence-based suggestions for foundational documentation updates
 
@@ -265,7 +264,7 @@ Provide a comprehensive summary including:
 - **Recommendation**: [specific update needed]
 - **Evidence**: [code references supporting the recommendation]
 
-#### Architecture Enhancement Opportunities  
+#### Architecture Enhancement Opportunities
 - **Gap Identified**: [missing foundational documentation area]
 - **Scope**: [what should be documented]
 - **Rationale**: [why this deserves foundational documentation]
@@ -289,12 +288,12 @@ Provide a comprehensive summary including:
   - **Content Type**: [e.g., "architectural overview", "design decisions", "integration patterns"]
   - **Rationale**: [why this content remains at the broader tier]
 
-- **Redundancies Eliminated**: 
+- **Redundancies Eliminated**:
   - **Duplicate Content Removed**: [specific duplications eliminated]
   - **Hierarchical Corrections**: [content moved to appropriate tier level]
   - **Reference Consolidations**: [areas where links replaced duplication]
 
-- **Migration Safety**: 
+- **Migration Safety**:
   - **Content Preserved**: [confirmation that no information was lost]
   - **Rollback Information**: [documentation of changes for potential reversal]
   - **Validation Results**: [confirmation of no broken references]

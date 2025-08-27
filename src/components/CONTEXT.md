@@ -9,7 +9,7 @@ The `/src/components` directory implements a **modern React 19 component system*
 ### Component Organization Strategy
 
 - **Flat Directory Structure**: Simple organization with minimal nesting for discoverability
-- **Functional Grouping**: `/analytics/` subdirectory for specialized analytics components  
+- **Functional Grouping**: `/analytics/` subdirectory for specialized analytics components
 - **Server-First Architecture**: Server components as default, client components only when needed
 - **Single Responsibility**: Each component handles one specific concern or functionality
 
@@ -33,10 +33,10 @@ export default async function CurrentCount(props: { id: string }) {
   const result = await db.query.counterSchema.findMany({
     where: eq(counterSchema.id, props.id),
   });
-  
+
   // Server-side internationalization
   const t = await getTranslations('CurrentCount');
-  
+
   return <span>{t('count', { count: result[0]?.count ?? 0 })}</span>;
 }
 ```
@@ -50,7 +50,7 @@ export default async function CurrentCount(props: { id: string }) {
 export default function CounterForm(props: { id: string }) {
   const t = useTranslations('CounterForm');
   const router = useRouter();
-  
+
   // Client-side form handling with validation
   const form = useForm({
     resolver: zodResolver(CounterValidation),
@@ -129,7 +129,7 @@ export default function PostHogProvider({ children }: { children: ReactNode }) {
 function PostHogPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     if (pathname) {
       const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
@@ -158,7 +158,7 @@ export default function SuspendedPostHogPageView() {
 // Server component i18n pattern
 export default async function Hello() {
   const t = await getTranslations('Hello');
-  
+
   return (
     <p>
       {t.rich('greeting', {
@@ -180,7 +180,7 @@ export default function LocaleSwitcher() {
   const t = useTranslations('LocaleSwitcher');
   const pathname = usePathname();
   const router = useRouter();
-  
+
   function handleLocaleChange(newLocale: string) {
     router.push(pathname.replace(`/${locale}`, `/${newLocale}`));
     router.refresh();
@@ -260,7 +260,7 @@ export default function LocaleSwitcher() {
 
 ```typescript
 // Router integration patterns
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 // Server component refresh after client actions
 router.refresh(); // Updates server components with new data
@@ -284,7 +284,7 @@ router.push(pathname.replace(`/${locale}`, `/${newLocale}`));
 **Security-First Component Design**: Components integrate security patterns throughout.
 
 - **Input Sanitization**: All user inputs validated through Zod schemas
-- **Authentication Aware**: Components check user state and handle unauthenticated scenarios  
+- **Authentication Aware**: Components check user state and handle unauthenticated scenarios
 - **CSRF Protection**: Form submissions include proper headers and validation
 - **Environment Security**: Sensitive data accessed only through validated environment variables
 
@@ -339,7 +339,7 @@ function renderWithProviders(component: ReactElement) {
 // Composition pattern example
 export interface BaseTemplateProps {
   leftNav?: ReactNode;
-  rightNav?: ReactNode;  
+  rightNav?: ReactNode;
   children: ReactNode;
 }
 

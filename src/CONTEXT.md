@@ -63,7 +63,7 @@ This source architecture has achieved production readiness with comprehensive te
 ### `/src/libs/` - Service Integration Hub
 **Infrastructure Services**
 - **`Arcjet.ts`**: Security middleware with bot protection and rate limiting
-- **`DB.ts`**: Database connection management with hot-reload protection  
+- **`DB.ts`**: Database connection management with hot-reload protection
 - **`Env.ts`**: Type-safe environment variable validation using @t3-oss/env-nextjs
 - **`I18n.ts`**: Internationalization configuration with next-intl
 - **`Logger.ts`**: Structured logging with LogTape supporting multiple outputs

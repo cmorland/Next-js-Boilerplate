@@ -57,24 +57,24 @@ export const Env = createEnv({
 ```yaml
 workflow:
   1. Code Quality Gates:
-     - TypeScript type checking (tsc --noEmit)
-     - ESLint validation with @antfu/eslint-config
-     - Unit tests (Vitest) with coverage reporting
-     - Integration tests with database
-     
+    - TypeScript type checking (tsc --noEmit)
+    - ESLint validation with @antfu/eslint-config
+    - Unit tests (Vitest) with coverage reporting
+    - Integration tests with database
+
   2. Build Verification:
-     - Next.js production build
-     - Bundle analysis and optimization
-     - Docker image creation (if applicable)
-     
+    - Next.js production build
+    - Bundle analysis and optimization
+    - Docker image creation (if applicable)
+
   3. Security & Compliance:
-     - Dependency vulnerability scanning
-     - Secrets detection
-     - Code quality analysis
-     
+    - Dependency vulnerability scanning
+    - Secrets detection
+    - Code quality analysis
+
   4. Deployment:
-     - Automatic preview deployments for PRs
-     - Production deployment on main branch merge
+    - Automatic preview deployments for PRs
+    - Production deployment on main branch merge
 ```
 
 **Specialized Workflows**:
@@ -129,12 +129,12 @@ const db = drizzle(client, {
    - Bot detection and mitigation
    - Rate limiting per endpoint
    - DDoS protection
-   
+
 2. Clerk Authentication:
    - OAuth integration (Google, GitHub, etc.)
    - Session management with JWTs
    - Role-based access control
-   
+
 3. Environment Security:
    - Secret validation with Zod schemas
    - Runtime environment checks

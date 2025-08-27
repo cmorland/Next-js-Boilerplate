@@ -57,18 +57,18 @@ class ExternalAPIClient:
         self.base_url = base_url
         self.session: Optional[aiohttp.ClientSession] = None
         self.access_token: Optional[str] = None
-    
+
     async def __aenter__(self):
         self.session = aiohttp.ClientSession(
             timeout=aiohttp.ClientTimeout(total=REQUEST_TIMEOUT)
         )
         await self.authenticate()
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.session:
             await self.session.close()
-    
+
     async def authenticate(self) -> None:
         """Authenticate with OAuth2 to get access token"""
         auth_url = f"{self.base_url}/oauth/token"
@@ -77,7 +77,7 @@ class ExternalAPIClient:
             "client_id": OAUTH_CLIENT_ID,
             "client_secret": OAUTH_CLIENT_SECRET
         }
-        
+
         async with self.session.post(auth_url, data=auth_data) as response:
             if response.status == 200:
                 auth_response = await response.json()
@@ -91,8 +91,8 @@ class ExternalAPIClient:
 #### Data Processing Operation
 ```python
 async def process_data(
-    self, 
-    data: Dict[str, Any], 
+    self,
+    data: Dict[str, Any],
     options: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """Process data using external API"""
@@ -102,20 +102,20 @@ async def process_data(
         "X-API-Key": self.api_key,
         "Content-Type": "application/json"
     }
-    
+
     payload = {
         "data": data,
         "options": options or {}
     }
-    
+
     for attempt in range(MAX_RETRIES):
         try:
             async with self.session.post(
-                endpoint, 
-                json=payload, 
+                endpoint,
+                json=payload,
                 headers=headers
             ) as response:
-                
+
                 if response.status == 200:
                     return await response.json()
                 elif response.status == 429:
@@ -128,12 +128,12 @@ async def process_data(
                     continue
                 else:
                     response.raise_for_status()
-                    
+
         except aiohttp.ClientError as e:
             if attempt == MAX_RETRIES - 1:
                 raise ExternalAPIError(f"API request failed after {MAX_RETRIES} attempts: {str(e)}")
             await asyncio.sleep(RETRY_DELAY * (2 ** attempt))
-    
+
     raise ExternalAPIError("Maximum retry attempts exceeded")
 ```
 
@@ -169,16 +169,16 @@ def map_api_error(status_code: int, response_data: Dict[str, Any]) -> ExternalAP
         500: ("Internal Server Error", ExternalAPIError),
         503: ("Service Unavailable", ExternalAPIError)
     }
-    
+
     error_message, exception_class = error_mapping.get(
-        status_code, 
+        status_code,
         (f"Unknown error (status: {status_code})", ExternalAPIError)
     )
-    
+
     # Include API error details if available
     if "error" in response_data:
         error_message += f": {response_data['error']}"
-    
+
     return exception_class(error_message)
 ```
 
@@ -235,15 +235,15 @@ Authorization: Bearer {access_token}
 **Response:**
 ```json
 {
-    "success": true,
-    "result": {
-        "processed_data": "...",
-        "metadata": {
-            "processing_time": 1.5,
-            "version": "v2.1"
-        }
-    },
-    "request_id": "req_abc123"
+  "success": true,
+  "result": {
+    "processed_data": "...",
+    "metadata": {
+      "processing_time": 1.5,
+      "version": "v2.1"
+    }
+  },
+  "request_id": "req_abc123"
 }
 ```
 
@@ -256,14 +256,14 @@ Authorization: Bearer {access_token}
 **Response:**
 ```json
 {
-    "request_id": "req_abc123",
-    "status": "completed",
-    "result": {
-        "processed_data": "...",
-        "metadata": {}
-    },
-    "created_at": "2024-01-15T10:30:00Z",
-    "completed_at": "2024-01-15T10:30:15Z"
+  "request_id": "req_abc123",
+  "status": "completed",
+  "result": {
+    "processed_data": "...",
+    "metadata": {}
+  },
+  "created_at": "2024-01-15T10:30:00Z",
+  "completed_at": "2024-01-15T10:30:15Z"
 }
 ```
 
@@ -314,12 +314,12 @@ async def test_successful_data_processing():
         mock_response = AsyncMock()
         mock_response.status = 200
         mock_response.json.return_value = {"result": "processed"}
-        
+
         mock_session.return_value.__aenter__.return_value.post.return_value.__aenter__.return_value = mock_response
-        
+
         client = ExternalAPIClient("test-key", "https://api.test.com")
         result = await client.process_data({"input": "test"})
-        
+
         assert result["result"] == "processed"
 ```
 
@@ -341,15 +341,15 @@ async def test_successful_data_processing():
 ### Logging Format
 ```json
 {
-    "timestamp": "2024-01-15T10:30:00Z",
-    "level": "INFO",
-    "event": "external_api_request",
-    "request_id": "req_abc123",
-    "endpoint": "/process",
-    "method": "POST",
-    "status_code": 200,
-    "response_time": 1.5,
-    "retry_count": 0
+  "timestamp": "2024-01-15T10:30:00Z",
+  "level": "INFO",
+  "event": "external_api_request",
+  "request_id": "req_abc123",
+  "endpoint": "/process",
+  "method": "POST",
+  "status_code": 200,
+  "response_time": 1.5,
+  "retry_count": 0
 }
 ```
 

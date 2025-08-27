@@ -41,7 +41,7 @@ These hooks execute at specific points in Claude Code's lifecycle, providing det
 - Fails gracefully if either file is missing
 - Handles partial availability (will attach whichever files exist)
 
-**Customization**: 
+**Customization**:
 - Copy `docs/MCP-ASSISTANT-RULES.md` template to your project root
 - Customize it with your project-specific standards, principles, and constraints
 - The hook will automatically include it in Gemini consultations
@@ -95,7 +95,7 @@ These hooks execute at specific points in Claude Code's lifecycle, providing det
 
 **Purpose**: Provides pleasant audio feedback when Claude Code needs your attention or completes tasks.
 
-**Triggers**: 
+**Triggers**:
 - `Notification` events (all notifications including input needed)
 - `Stop` events (main task completion)
 
@@ -126,7 +126,7 @@ These hooks execute at specific points in Claude Code's lifecycle, providing det
    # Test notification
    .claude/hooks/notify.sh input
    .claude/hooks/notify.sh complete
-   
+
    # View logs
    tail -f .claude/logs/context-injection.log
    tail -f .claude/logs/security-scan.log

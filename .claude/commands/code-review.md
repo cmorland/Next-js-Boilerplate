@@ -20,12 +20,10 @@ Changes that unlock new capabilities, remove significant constraints, or improve
 ### ❌ Excluded from Reports
 Minor style issues, micro-optimizations (<10%), theoretical best practices, edge cases affecting <1% of users.
 
-
 ## Auto-Loaded Project Context:
 @/CLAUDE.md
 @/docs/ai-context/project-structure.md
 @/docs/ai-context/docs-overview.md
-
 
 ## Command Execution
 
@@ -196,7 +194,6 @@ For each dynamically generated agent:
 #### Parallel Execution Strategy:
 
 **Launch all agents simultaneously** for maximum efficiency
-
 
 ### Step 5: Synthesize Findings with Maximum Analysis Power
 

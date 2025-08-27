@@ -29,6 +29,9 @@ export default antfu(
     // Ignored paths
     ignores: [
       'migrations/**/*',
+      'CLAUDE.md',
+      '**/CONTEXT.md',
+      'docs/ai-context/**/*.md',
     ],
   },
   // --- Accessibility Rules ---

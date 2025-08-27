@@ -38,13 +38,11 @@ Granular CONTEXT.md files co-located with code for minimal cascade effects:
 *Granular implementation documentation co-located with code:*
 
 - **[Service Integration](/src/libs/CONTEXT.md)** - *External services.* Authentication (Clerk), security (Arcjet), analytics (PostHog, Sentry), database (Drizzle), and internationalization integration patterns with production-ready configuration management
-- **[App Router Patterns](/src/app/CONTEXT.md)** - *Routing architecture.* Next.js 15 App Router implementation with route groups, layout composition, internationalization routing, authentication flows, and API route patterns  
+- **[App Router Patterns](/src/app/CONTEXT.md)** - *Routing architecture.* Next.js 15 App Router implementation with route groups, layout composition, internationalization routing, authentication flows, and API route patterns
 - **[Component System](/src/components/CONTEXT.md)** - *UI patterns.* React 19 component architecture with server/client boundaries, form handling (React Hook Form + Zod), analytics integration (PostHog), internationalization patterns, and accessibility-first design
 - **[Database Schema](/src/models/CONTEXT.md)** - *Data patterns.* Drizzle ORM PostgreSQL schemas with centralized schema definition, automatic TypeScript inference, migration management, type-safe database operations across Next.js stack, and evolution-friendly design patterns
 - **[Input Validation](/src/validations/CONTEXT.md)** - *Validation patterns.* Zod 3.x schemas with TypeScript integration, cross-stack validation consistency (client forms + API routes), business rule enforcement, structured error handling, and environment configuration validation
 - **[Utility Functions](/src/utils/CONTEXT.md)** - *Helper patterns.* Environment-aware deployment utilities, internationalization path construction, application configuration management, runtime detection, database migration automation, and cross-cutting infrastructure functions with comprehensive test coverage
-
-
 
 ## Adding New Documentation
 

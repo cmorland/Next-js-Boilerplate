@@ -77,7 +77,6 @@ Return comprehensive findings addressing this investigation area."
 
 **CRITICAL: When launching sub-agents, always use parallel execution with a single message containing multiple Task tool invocations.**
 
-
 ## Step 5: Synthesize Analysis and Plan Refactoring
 
 Think deeply about integrating findings from all sub-agent investigations for safe and effective refactoring. Combine findings from all agents to create optimal refactoring strategy:
@@ -160,7 +159,6 @@ Implement the refactoring based on the synthesized analysis:
 - **Follow coding standards** - Apply project's style guidelines
 - **Test compatibility** - Verify imports work correctly
 
-
 ## Step 8: Quality Verification
 
 For each refactored file:
@@ -168,7 +166,6 @@ For each refactored file:
 - **Run type checks** - Ensure TypeScript compilation passes
 - **Test functionality** - Confirm no breaking changes
 - **Validate structure** - Ensure new organization follows project patterns
-
 
 ## Error Handling
 - **File not found** - Skip and inform user

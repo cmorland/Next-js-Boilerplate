@@ -14,12 +14,12 @@ export async function middleware(request: NextRequest) {
   // Layer 1: Arcjet Security (Bot protection, rate limiting)
   const decision = await aj.protect(request);
   if (decision.isDenied()) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   // Layer 2: Clerk Authentication (Route-specific)
   const authResult = await clerkMiddleware(request);
-  
+
   // Layer 3: Internationalization (Locale routing)
   return createI18nMiddleware(request);
 }
@@ -78,11 +78,11 @@ const ClientComponent = ({ initialData }: Props) => {
 export const PUT = async (request: Request): Promise<NextResponse> => {
   const json = await request.json();
   const parse = ValidationSchema.safeParse(json);
-  
+
   if (!parse.success) {
     return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
   }
-  
+
   const result = await db.insert(schema).values(parse.data);
   return NextResponse.json(result);
 };
@@ -116,6 +116,7 @@ test('Counter API integration', async () => {
     headers: { 'x-e2e-random-id': 'test-123' },
     body: JSON.stringify({ increment: 1 })
   });
+
   expect(response.status).toBe(200);
 });
 ```

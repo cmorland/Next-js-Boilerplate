@@ -10,7 +10,7 @@ The `/src/app` directory implements a **Next.js 15 App Router** architecture wit
 
 - **`[locale]/`**: Internationalization wrapper supporting English/French with dynamic locale routing
 - **`(auth)/`**: Authentication route group with protected routes and authentication boundaries
-- **`(marketing)/`**: Public marketing pages with SEO-optimized layouts  
+- **`(marketing)/`**: Public marketing pages with SEO-optimized layouts
 - **`(center)/`**: Centered layout sub-group for authentication forms
 - **`api/`**: RESTful API routes with validation and database integration
 - **Root Files**: Global error handling, dynamic sitemap, and robots.txt generation
@@ -25,7 +25,7 @@ The `/src/app` directory implements a **Next.js 15 App Router** architecture wit
 // Route group structure
 /src/app/[locale]/
 ├── (auth)/                    # Authentication boundary
-│   ├── (center)/              # Centered auth forms  
+│   ├── (center)/              # Centered auth forms
 │   │   ├── sign-in/[[...sign-in]]/
 │   │   └── sign-up/[[...sign-up]]/
 │   └── dashboard/             # Protected application area
@@ -83,14 +83,14 @@ export async function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }));
 }
 
-export default async function LocaleLayout(props: { children: ReactNode; params: Promise<{ locale: string }>; }) {
+export default async function LocaleLayout(props: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await props.params;
-  
+
   // Validate locale and handle 404 for unsupported locales
   if (!hasLocale(locale)) {
     notFound();
   }
-  
+
   setRequestLocale(locale);
   // Layout implementation
 }
@@ -102,7 +102,7 @@ export default async function LocaleLayout(props: { children: ReactNode; params:
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'PageName' });
-  
+
   return {
     title: t('meta_title'),
     description: t('meta_description'),
@@ -128,8 +128,10 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 const isAuthPage = createRouteMatcher([
-  '/sign-in(.*)', '/:locale/sign-in(.*)',
-  '/sign-up(.*)', '/:locale/sign-up(.*)'
+  '/sign-in(.*)',
+  '/:locale/sign-in(.*)',
+  '/sign-up(.*)',
+  '/:locale/sign-up(.*)'
 ]);
 ```
 
@@ -143,10 +145,10 @@ Middleware Route Check → Conditional Clerk Middleware → Layout Provider → 
 // Dynamic authentication URL generation
 export function getClerkUrls(locale: string) {
   const isDefaultLocale = locale === routing.defaultLocale;
-  
+
   return {
     signInUrl: isDefaultLocale ? '/sign-in' : `/${locale}/sign-in`,
-    signUpUrl: isDefaultLocale ? '/sign-up' : `/${locale}/sign-up`, 
+    signUpUrl: isDefaultLocale ? '/sign-up' : `/${locale}/sign-up`,
     dashboardUrl: isDefaultLocale ? '/dashboard' : `/${locale}/dashboard`,
   };
 }
@@ -162,20 +164,20 @@ export const PUT = async (request: Request) => {
   // 1. Input validation with Zod
   const json = await request.json();
   const parse = CounterValidation.safeParse(json);
-  
+
   if (!parse.success) {
     return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
   }
-  
+
   // 2. Database operation with Drizzle ORM
   const result = await db.insert(counterSchema).values(parse.data).onConflictDoUpdate({
     target: counterSchema.id,
     set: { count: sql`${counterSchema.count} + ${parse.data.count}` },
   }).returning();
-  
+
   // 3. Structured logging
   logger.info('Counter updated', { operation: 'upsert', count: parse.data.count });
-  
+
   return NextResponse.json({ message: 'Success', data: result });
 };
 ```
@@ -191,7 +193,7 @@ export const PUT = async (request: Request) => {
 // Enhanced NaN protection for test headers
 const testId = Number(request.headers.get('x-e2e-random-id')) || 0;
 
-// Logical OR (||) provides better NaN handling than nullish coalescing (??) 
+// Logical OR (||) provides better NaN handling than nullish coalescing (??)
 // because Number(undefined) returns NaN, and NaN || 0 === 0
 // while NaN ?? 0 === NaN (unexpected behavior)
 ```
@@ -236,12 +238,12 @@ const testId = Number(request.headers.get('x-e2e-random-id')) || 0;
   - **Pattern**: Client component with error capture and user-friendly fallback
   - **Features**: Sentry error reporting, locale-aware error messages
 
-- **`robots.ts`**: Dynamic robots.txt generation with route exclusions  
+- **`robots.ts`**: Dynamic robots.txt generation with route exclusions
   - **Pattern**: Export `robots()` function returning robots configuration
   - **Features**: Protected route exclusions, sitemap reference
 
 - **`sitemap.ts`**: Dynamic sitemap generation with internationalized URLs
-  - **Pattern**: Export `sitemap()` function returning URL entries  
+  - **Pattern**: Export `sitemap()` function returning URL entries
   - **Features**: Multi-locale URL generation, automatic discovery
 
 ## Integration Points
@@ -256,14 +258,16 @@ export default async function middleware(request: NextRequest, event: NextFetchE
   // 1. Security layer (Arcjet)
   if (process.env.ARCJET_KEY) {
     const decision = await aj.protect(request);
-    if (decision.isDenied()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (decision.isDenied()) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
   }
-  
+
   // 2. Conditional authentication (Clerk)
   if (isAuthPage(request) || isProtectedRoute(request)) {
     return clerkMiddleware(/* locale-aware auth logic */)(request, event);
   }
-  
+
   // 3. Internationalization routing
   return handleI18nRouting(request);
 }
@@ -273,7 +277,7 @@ export default async function middleware(request: NextRequest, event: NextFetchE
 
 **Clean Service Boundaries**: App Router components consume configured services from `/src/libs`.
 
-- **Database Operations**: API routes use `db` from `/src/libs/DB.ts` for type-safe operations  
+- **Database Operations**: API routes use `db` from `/src/libs/DB.ts` for type-safe operations
 - **Logging Integration**: Components use `logger` from `/src/libs/Logger.ts` for structured logging
 - **Environment Access**: Components access validated environment variables via `Env` from `/src/libs/Env.ts`
 - **Authentication**: Layouts integrate with Clerk configuration for protected routes
@@ -285,12 +289,12 @@ export default async function middleware(request: NextRequest, event: NextFetchE
 ```typescript
 // Server components (default)
 - All layout components for SEO and performance
-- Page components with data fetching and translations  
+- Page components with data fetching and translations
 - BaseTemplate with server-side rendering
 
 // Client components (selective)
 - LocaleSwitcher for interactive locale switching
-- PostHogProvider for analytics initialization  
+- PostHogProvider for analytics initialization
 - Global error boundary for error handling
 - Form components requiring user interaction
 ```
@@ -305,10 +309,10 @@ export default async function middleware(request: NextRequest, event: NextFetchE
 // Multi-locale static generation for dynamic routes
 export function generateStaticParams() {
   return routing.locales
-    .map(locale => 
-      Array.from({ length: 6 }).map((_, index) => ({ 
-        slug: `${index}`, 
-        locale 
+    .map(locale =>
+      Array.from({ length: 6 }).map((_, index) => ({
+        slug: `${index}`,
+        locale
       }))
     )
     .flat(1);
@@ -326,7 +330,7 @@ export const dynamicParams = false; // Strict static generation
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'Page' });
-  
+
   return {
     title: t('meta_title'),
     description: t('meta_description'),

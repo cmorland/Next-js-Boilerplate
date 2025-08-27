@@ -93,12 +93,12 @@ src/validations/
 
 ### Schema Definition Anatomy
 ```typescript
-import z from 'zod';  // Standardized default import pattern
+import z from 'zod'; // Standardized default import pattern
 
 export const CounterValidation = z.object({
-  increment: z.coerce.number()  // Type coercion for form inputs
-    .min(1)                     // Business rule: minimum increment
-    .max(3),                    // Business rule: maximum increment
+  increment: z.coerce.number() // Type coercion for form inputs
+    .min(1) // Business rule: minimum increment
+    .max(3), // Business rule: maximum increment
 });
 
 // Automatic TypeScript type inference:
@@ -119,8 +119,8 @@ if (!parse.success) {
 
 // Direct usage of validated data in database operations
 const count = await db.insert(counterSchema).values({
-  id, 
-  count: parse.data.increment  // Type-safe, validated data
+  id,
+  count: parse.data.increment // Type-safe, validated data
 });
 ```
 
@@ -156,7 +156,7 @@ const form = useForm({
 ```typescript
 // Same schema used across multiple layers:
 // 1. Client-side form (via zodResolver)
-// 2. API validation (via safeParse)  
+// 2. API validation (via safeParse)
 // 3. Database operations (via parse.data)
 // 4. TypeScript inference (automatic types)
 ```
@@ -184,7 +184,7 @@ const result = CounterValidation.safeParse(input);
 if (!result.success) {
   // Server-side: Structured API response
   return NextResponse.json(z.treeifyError(result.error), { status: 422 });
-  
+
   // Client-side: Form error state automatically handled by zodResolver
 }
 
@@ -204,11 +204,13 @@ const validatedData: { increment: number } = result.data;
 describe('CounterValidation', () => {
   it('accepts valid increment values', () => {
     const result = CounterValidation.safeParse({ increment: 2 });
+
     expect(result.success).toBe(true);
   });
 
   it('rejects out-of-range values', () => {
     const result = CounterValidation.safeParse({ increment: 5 });
+
     expect(result.success).toBe(false);
   });
 });
@@ -225,8 +227,8 @@ describe('CounterValidation', () => {
 // Business rules defined at validation layer
 export const CounterValidation = z.object({
   increment: z.coerce.number()
-    .min(1, "Increment must be at least 1")     // Business constraint
-    .max(3, "Increment cannot exceed 3"),       // Business constraint
+    .min(1, 'Increment must be at least 1') // Business constraint
+    .max(3, 'Increment cannot exceed 3'), // Business constraint
 });
 ```
 

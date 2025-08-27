@@ -7,7 +7,7 @@ Orchestration templates that enable Claude Code to coordinate multi-agent workfl
 After reading the [main kit documentation](../README.md), you'll understand how these commands fit into the integrated system. Each command:
 
 - **Auto-loads** the appropriate documentation tier for its task
-- **Spawns specialized agents** based on complexity 
+- **Spawns specialized agents** based on complexity
 - **Integrates MCP servers** when external expertise helps
 - **Maintains documentation** to keep AI context current
 
@@ -32,7 +32,7 @@ All commands benefit from automatic context injection via the `subagent-context-
 
 **How it works**: Adaptively scales from direct analysis to multi-agent orchestration based on request complexity. Agents read documentation, analyze code, map dependencies, and consult MCP servers as needed.
 
-### 🔍 `/code-review` 
+### 🔍 `/code-review`
 **Purpose**: Get multiple expert perspectives on code quality, focusing on high-impact findings rather than nitpicks.
 
 **When to use**:
@@ -111,7 +111,7 @@ All commands benefit from automatic context injection via the `subagent-context-
 ```bash
 /full-context "implement user notifications"    # Understand
 # ... implement the feature ...
-/code-review "review notification system"       # Validate  
+/code-review "review notification system"       # Validate
 /update-docs "document notification feature"    # Synchronize
 /handoff "completed notification system"        # Preserve
 ```
